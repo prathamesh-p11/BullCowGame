@@ -3,7 +3,7 @@
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
-    Super::BeginPlay(); 
+    Super::BeginPlay();
     SetupGame(); //initializing game
 }
 
@@ -17,27 +17,7 @@ void UBullCowCartridge::OnInput(const FString &Input) // When the player hits en
     }
     else
     {
-        if (Input == HiddenWord)
-        {
-            PrintLine(TEXT("You Won!"));
-            EndGame();
-        }
-
-        else
-        {
-            --Lives;
-            if(Lives > 0)
-            {
-                if (HiddenWord.Len() != Input.Len())
-                {
-                    PrintLine(TEXT("Hidden word length is eual to %i, try again!!"), HiddenWord.Len());
-                }
-            }
-            else
-            {
-                PrintLine(TEXT("You have no lives left!!"));
-            }
-        }
+        ProcessGuess(Input);
     }
 }
 
@@ -48,14 +28,51 @@ void UBullCowCartridge::SetupGame()
     bGameOver = false;
 
     PrintLine(TEXT("Welcome to bull cow game!"));
-    PrintLine(TEXT("Total lives remaining: %i"), Lives);
+    PrintLine(TEXT("Total lives: %i"), Lives);
     PrintLine(TEXT("Guess the %i letter word:"), HiddenWord.Len());
-
     PrintLine(TEXT("Press enter to continue..."));
 }
 
 void UBullCowCartridge::EndGame()
 {
     bGameOver = true;
-    PrintLine(TEXT("Press Enter to play again...."));
+    PrintLine(TEXT("\nPress Enter to play again...."));
+}
+
+void UBullCowCartridge::ProcessGuess(const FString &Guess)
+{
+    if (Guess == HiddenWord)
+    {
+        PrintLine(TEXT("You Won!"));
+        EndGame();
+        return;
+    }
+
+    /* 
+    if(!IsIsogram)
+    {
+        
+    }
+ */
+    if (Lives <= 0)
+    {
+        ClearScreen();
+        PrintLine(TEXT("You have no lives left!!"));
+        PrintLine(TEXT("The hidden word was %s"), *HiddenWord);
+        EndGame();
+        return;
+    }
+
+    if (HiddenWord.Len() != Guess.Len())
+    {
+        PrintLine(TEXT("Hidden word length is equal to %i\nTry guessing again!!"), HiddenWord.Len());
+        PrintLine(TEXT("Lives remaining: %i"), --Lives);
+        return;
+    }
+    
+    --Lives;
+    PrintLine(TEXT("\nLost a life!"));
+
+    PrintLine(TEXT("Try guessing again!!"));
+    PrintLine(TEXT("Lives remaining: %i"), Lives);
 }
