@@ -1,14 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
-#include "Misc/FileHelper.h"
-#include "Misc/Paths.h"
-#include "HiddenWordList.h"
-
-void UBullCowCartridge::BeginPlay() // When the game starts
+void UBullCowCartridge::BeginPlay()
 {
     Super::BeginPlay();
-    SetupGame(); //initializing game
-    PrintLine(TEXT("Number of valid words = %i :"), GetValidWords(Words).Num());   
+    SetupGame();
 }
 
 void UBullCowCartridge::OnInput(const FString &Input) // When the player hits enter
@@ -37,12 +31,7 @@ void UBullCowCartridge::OnInput(const FString &Input) // When the player hits en
 
 void UBullCowCartridge::SetupGame()
 {
-    TArray<FString> WordList;
-    const FString WordListPath = FPaths::ProjectContentDir() / TEXT("WordLists/HiddenWordList.txt");
-    FFileHelper::LoadFileToStringArray(WordList, *WordListPath);
-
-
-    //HiddenWord = TEXT("hour");
+    HiddenWord = TEXT("hour");
     Lives = HiddenWord.Len();
     bGameOver = false;
 
@@ -110,20 +99,5 @@ bool UBullCowCartridge::IsIsogram(const FString &Guess) const
             return false;
         }
     }
-
     return true;
-}
-
-
-TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const
-{
-    TArray<FString> ValidWords;
-    for(FString Word : WordList)
-    {
-        if(Word.Len()>=4 && Word.Len()<=8 && IsIsogram(Word))
-        {
-            ValidWords.Emplace(Word);
-        }
-    }
-    return ValidWords;
 }

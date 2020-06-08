@@ -1,7 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
 #include "CoreMinimal.h"
 #include "Console/Cartridge.h"
 #include "BullCowCartridge.generated.h"
@@ -21,8 +19,6 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	FString HiddenWord;
 	int32 Lives;
 	bool bGameOver;
-
 	void ProcessGuess(const FString&);
 	bool IsIsogram(const FString&) const;
-	TArray<FString> GetValidWords(const TArray<FString>&) const;
 };
