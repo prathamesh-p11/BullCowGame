@@ -1,7 +1,12 @@
 #include "BullCowCartridge.h"
+#include "HiddenWordList.h"
+
 void UBullCowCartridge::BeginPlay()
 {
     Super::BeginPlay();
+    
+    PrintLine(TEXT("Number of words = %i"), Words.Num());
+    PrintLine(TEXT("\nNumber of Valid words = %i"), GetValidWords(Words).Num());
     SetupGame();
 }
 
@@ -100,4 +105,19 @@ bool UBullCowCartridge::IsIsogram(const FString &Guess) const
         }
     }
     return true;
+}
+
+
+TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString> &WordList) const
+{
+    TArray<FString> ValidWords;
+    for(auto Word: WordList)
+    {
+        if( (Word.Len()>=4 || Word.Len()<=9) && IsIsogram(Word))
+        {
+            ValidWords.Emplace(Word);
+        }       
+    }
+
+    return ValidWords;
 }
